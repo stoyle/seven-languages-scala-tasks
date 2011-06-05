@@ -1,17 +1,42 @@
 package no.knowit
 
+import annotation.tailrec
+
 object NinetyNine {
 
-  def last[T](l: List[T]) = 8
+  @tailrec
+  def last[T](l: List[T]): T = l match {
+    case head :: Nil => head
+    case head :: tail => last(tail)
+    case Nil => throw new RuntimeException("Empty list")
+  }
 
-  def penultimate[T](l: List[T]) = 5
+  @tailrec
+  def penultimate[T](l: List[T]): T = l match {
+    case List(_, e, _) => e
+    case head :: tail => penultimate(tail)
+    case Nil => throw new RuntimeException("Empty list")
+  }
 
-  def nth[T](num: Int, l: List[T]) = 2
+  @tailrec
+  def nth[T](num: Int, l: List[T]): T = (l, num) match {
+    case (head :: tail, cur) if cur == 0 => head
+    case (head :: tail, cur) => nth(cur - 1, tail)
+    case (Nil, _) => throw new RuntimeException(num + " is too large for list")
+  }
 
-  def length[T](l: List[T]) = 6
 
-  def reverse[T](l: List[T]) = List(8, 5, 3, 2, 1, 1)
+  def length[T](l: List[T]): Int = {
+    @tailrec
+    def recurseLength[T](acc: Int, l: List[T]): Int = l match {
+      case head :: tail => recurseLength(acc + 1, tail)
+      case Nil => acc
+    }
+    recurseLength(0, l)
+  }
 
-  def isPalindrome[T](l: List[T]) = true
+  def reverse[T](l: List[T]): List[T] = l.foldLeft(List[T]()) {(l, e) => e :: l}
+
+  def isPalindrome[T](l: List[T]) = l == reverse(l)
 
 }
