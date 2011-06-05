@@ -22,3 +22,4 @@ project/plugins/target/
 project/plugins/lib_managed/
 project/plugins/src_managed/
 lib_managed/
+.scala_dependencies
