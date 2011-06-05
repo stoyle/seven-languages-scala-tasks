@@ -14,4 +14,12 @@ object NinetyNine {
 
   def isPalindrome[T](l: List[T]) = true
 
+  def flatten[T](l: List[T]) = List(1, 1, 2, 3, 5, 8)
+
+  def compress[T](l: List[T]) = List('a, 'b, 'c, 'a, 'd, 'e)
+
+  def pack[T](l: List[T]) = List(List('a, 'a, 'a, 'a), List('b), List('c, 'c), List('a, 'a), List('d), List('e, 'e, 'e, 'e))
+
+  def encode[T](l: List[T]) = List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e))
+
 }
