@@ -33,5 +33,21 @@ class NinetyNineTest extends FunSuite {
   test("6. Find out whether a list is a palindrome.") {
     assert(true === isPalindrome(List(1, 2, 3, 2, 1)))
   }
-  
+
+  test("7. Flatten a nested list structure.") {
+    assert(List(1, 1, 2, 3, 5, 8) === flatten(List(List(1, 1), 2, List(3, List(5, 8)))))
+  }
+
+  test("8. Eliminate consecutive duplicates of list elements.") {
+    assert(List('a, 'b, 'c, 'a, 'd, 'e) === compress(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)))
+  }
+
+  test("9. Pack consecutive duplicates of list elements into sublists.") {
+    assert(List(List('a, 'a, 'a, 'a), List('b), List('c, 'c), List('a, 'a), List('d), List('e, 'e, 'e, 'e))
+      ===  pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)))
+  }
+
+  test("10. Run-length encoding of a list.") {
+    assert(List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e)) === encode(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)))
+  }
 }
