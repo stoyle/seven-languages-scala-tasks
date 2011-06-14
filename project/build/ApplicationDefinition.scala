@@ -6,6 +6,10 @@ class ApplicationProject(info: ProjectInfo) extends DefaultProject(info) {
   
   val scalatest = "org.scalatest" % "scalatest_2.9.0" % "1.6.1" % "test"
   val junit = "junit" % "junit" % "4.8.2" % "test"
+
+  val squeryl = "org.squeryl" %% "squeryl" % "0.9.4"
+
+  val derbyDriver = "org.apache.derby" % "derby" % "10.7.1.1"
 	
   val junitInterface = "com.novocode" %% "junit-interface" % "0.4.0" from "http://cloud.github.com/downloads/bryanjswift/junit-interface/junit-interface-0.4.0.jar"
 
