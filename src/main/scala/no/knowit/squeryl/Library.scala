@@ -37,17 +37,31 @@ object Library extends Schema {
     columns(a.firstName, a.lastName) are (indexed)))
 
   on(books)(b => declare(
-    b.title is (indexed("idxBookTitles"), dbType("varchar(255)"))))
+    b.title is (unique, indexed("idxBookTitles"), dbType("varchar(255)"))))
 
-  // TODO: Sett opp relasjon mellom bok og forfatter
+  val authorToBooks = oneToManyRelation(authors, books).
+    via((a, b) => a.id === b.authorId)
 
-  // TODO: Sett opp søk på forfatter
-  def findAuthorByName(firstName: String, lastName: String): Option[Author] = None
+  def findAuthorByName(firstName: String, lastName: String): Option[Author] =
+    try {
+      from(authors)(a =>
+        where(a.firstName === firstName and a.lastName === lastName)
+          select (Some(a))).single
+    } catch {
+      case _ => None
+    }
 
-  def findAuthorByEmail(email: String): Option[Author] = None
+  def findAuthorByEmail(email: String): Option[Author] =
+    try {
+      from(authors)(a =>
+        where(a.email === Some(email))
+          select (Some(a))).single
+    } catch {
+      case _ => None
+    }
 
-  // TODO: Sett opp søk på bøker
-  def findBooksByAuthor(author: Author): List[Book] = Nil
+  def findBooksByAuthor(author: Author): List[Book] =
+    books.where(b => b.authorId === author.id).toList
 
   def init = {
     Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
