@@ -13,7 +13,7 @@ import org.squeryl.dsl.ManyToOne
 class Author(val id: Long,
   val firstName: String,
   val lastName: String,
-  val email: Option[String]) {
+  val email: Option[String]) extends KeyedEntity[Long] {
 
   // no-arg constructor required for classes with Option[] fields
   def this() = this(0, "", "", Some(""))
@@ -30,13 +30,26 @@ object Library extends Schema {
 
   val books = table[Book]("BOOKS")
 
-  on(authors)(s => declare(
-    s.email is (unique, indexed("idxEmailAddresses"), dbType("varchar(255)")),
-    s.firstName is (indexed),
-    s.lastName is (indexed),
-    columns(s.firstName, s.lastName) are (indexed)))
+  on(authors)(a => declare(
+    a.email is (indexed("idxEmailAddresses")),
+    a.firstName is (indexed),
+    a.lastName is (indexed),
+    columns(a.firstName, a.lastName) are (indexed)))
 
-  def main(args: Array[String]) = {
+  on(books)(b => declare(
+    b.title is (indexed("idxBookTitles"), dbType("varchar(255)"))))
+
+  // TODO: Sett opp relasjon mellom bok og forfatter
+
+  // TODO: Sett opp søk på forfatter
+  def findAuthorByName(firstName: String, lastName: String): Option[Author] = None
+
+  def findAuthorByEmail(email: String): Option[Author] = None
+
+  // TODO: Sett opp søk på bøker
+  def findBooksByAuthor(author: Author): List[Book] = Nil
+
+  def init = {
     Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
 
     SessionFactory.concreteFactory = Some(() =>
@@ -45,19 +58,8 @@ object Library extends Schema {
         new DerbyAdapter()))
 
     transaction {
+      // Library.printDdl
       Library.create
-    }
-
-    transaction {
-      authors.insert(new Author(1, "Neil", "Gaiman", None))
-
-      val res = from(authors) { a =>
-        where(a.lastName === "Gaiman")
-        select(a)
-      }
-
-      for (a <- res)
-        println(a.firstName + " " + a.lastName)
     }
   }
 
